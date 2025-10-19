@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google OAuth Test - FixMyStreet</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        pre {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 Google OAuth Test Page</h1>
+        <p>This page helps you test and debug Google OAuth integration.</p>
+        
+        <div id="status"></div>
+        
+        <h2>Step 1: Configure Google Client ID</h2>
+        <p>Replace <code>YOUR_GOOGLE_CLIENT_ID</code> below with your actual Google Client ID:</p>
+        <pre id="config-code"></pre>
+        
+        <h2>Step 2: Test Google Sign-In</h2>
+        <div id="g_id_onload"
+             data-client_id="YOUR_GOOGLE_CLIENT_ID"
+             data-callback="handleGoogleSignIn"
+             data-auto_prompt="false">
+        </div>
+        <div class="g_id_signin"
+             data-type="standard"
+             data-size="large"
+             data-theme="outline"
+             data-text="sign_in_with"
+             data-shape="rectangular"
+             data-logo_alignment="left">
+        </div>
+        
+        <h2>Step 3: Debug Information</h2>
+        <div id="debug-info"></div>
+    </div>
+
+    <script>
+        // Configuration
+        const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID'; // Replace with your actual Client ID
+        const API_BASE_URL = 'http://localhost:3000/api';
+        
+        // Update the configuration display
+        document.getElementById('config-code').textContent = `const GOOGLE_CLIENT_ID = '${GOOGLE_CLIENT_ID}';`;
+        
+        // Update the Google Sign-In configuration
+        document.getElementById('g_id_onload').setAttribute('data-client_id', GOOGLE_CLIENT_ID);
+        
+        // Status display
+        function showStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+        
+        // Debug information
+        function addDebugInfo(info) {
+            const debugDiv = document.getElementById('debug-info');
+            debugDiv.innerHTML += `<pre>${JSON.stringify(info, null, 2)}</pre>`;
+        }
+        
+        // Initialize Google Sign-In
+        function initializeGoogleSignIn() {
+            try {
+                google.accounts.id.initialize({
+                    client_id: GOOGLE_CLIENT_ID,
+                    callback: handleGoogleSignIn,
+                    auto_select: false,
+                    cancel_on_tap_outside: true
+                });
+                
+                showStatus('✅ Google Sign-In initialized successfully', 'success');
+                addDebugInfo({
+                    status: 'Google Sign-In initialized',
+                    clientId: GOOGLE_CLIENT_ID,
+                    timestamp: new Date().toISOString()
+                });
+            } catch (error) {
+                showStatus('❌ Failed to initialize Google Sign-In: ' + error.message, 'error');
+                addDebugInfo({ error: error.message, stack: error.stack });
+            }
+        }
+        
+        // Handle Google Sign-In response
+        async function handleGoogleSignIn(response) {
+            try {
+                showStatus('🔄 Processing Google Sign-In...', 'info');
+                addDebugInfo({
+                    status: 'Google Sign-In response received',
+                    credentialLength: response.credential ? response.credential.length : 0,
+                    timestamp: new Date().toISOString()
+                });
+                
+                // Test the backend API
+                const result = await fetch(`${API_BASE_URL}/auth/google`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        idToken: response.credential
+                    })
+                });
+                
+                const data = await result.json();
+                
+                if (result.ok) {
+                    showStatus('✅ Google OAuth test successful! User authenticated.', 'success');
+                    addDebugInfo({
+                        status: 'Backend authentication successful',
+                        user: data.user,
+                        hasToken: !!data.token
+                    });
+                } else {
+                    showStatus('❌ Backend authentication failed: ' + data.error, 'error');
+                    addDebugInfo({
+                        status: 'Backend authentication failed',
+                        error: data.error,
+                        response: data
+                    });
+                }
+                
+            } catch (error) {
+                showStatus('❌ Google Sign-In failed: ' + error.message, 'error');
+                addDebugInfo({
+                    status: 'Google Sign-In error',
+                    error: error.message,
+                    stack: error.stack
+                });
+            }
+        }
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            showStatus('🔄 Initializing Google OAuth test...', 'info');
+            
+            // Check if Google API is loaded
+            if (typeof google !== 'undefined') {
+                initializeGoogleSignIn();
+            } else {
+                showStatus('⏳ Waiting for Google API to load...', 'info');
+                setTimeout(() => {
+                    if (typeof google !== 'undefined') {
+                        initializeGoogleSignIn();
+                    } else {
+                        showStatus('❌ Google API failed to load. Check your internet connection.', 'error');
+                    }
+                }, 2000);
+            }
+        });
+        
+        // Add some helpful debugging information
+        addDebugInfo({
+            userAgent: navigator.userAgent,
+            currentUrl: window.location.href,
+            googleApiLoaded: typeof google !== 'undefined',
+            timestamp: new Date().toISOString()
+        });
+    </script>
+</body>
+</html>

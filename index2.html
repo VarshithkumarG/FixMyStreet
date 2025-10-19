@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FixMyStreet - Professional Street Issue Management</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="main-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <a class="logo" href="index2.html">
+                        <i class="fas fa-road"></i>
+                        <div class="logo-text">
+                            <h1>FixMyStreet</h1>
+                            <span class="tagline">REPORT • TRACK • RESOLVE</span>
+                        </div>
+                    </a>
+                </div>
+                
+                <nav class="main-nav">
+                    <a href="index2.html" class="nav-link active">Home</a>
+                    <a href="dashboard.html" class="nav-link">Dashboard</a>
+                    <a href="reports.html" class="nav-link">Reports</a>
+                    <a href="analytics.html" class="nav-link">Analytics</a>
+                    <a href="about.html" class="nav-link">About</a>
+                </nav>
+
+                <div class="user-section">
+                    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+                        <i class="fas fa-sun sun-icon"></i>
+                        <i class="fas fa-moon moon-icon"></i>
+                    </button>
+                    <div class="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </div>
+                    <div class="user-profile" onclick="toggleUserMenu()">
+                        <img src="https://via.placeholder.com/40x40/667eea/ffffff?text=U" alt="User" class="user-avatar">
+                        <span class="user-name">John Doe</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="user-menu" id="userMenu">
+                        <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                        <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+                        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 class="hero-title">Empowering Communities</h1>
+                    <p class="hero-subtitle">Bridging the gap between citizens and city infrastructure management</p>
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <div class="stat-number" id="homeTotalReports">0</div>
+                            <div class="stat-label">Issues Reported</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="homeResolutionRate">0%</div>
+                            <div class="stat-label">Resolution Rate</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="homeAvgResponse">0 Days</div>
+                            <div class="stat-label">Avg. Response Time</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="homeCities">0</div>
+                            <div class="stat-label">Cities Covered</div>
+                        </div>
+                    </div>
+                    <div class="hero-actions">
+                        <button class="btn-primary" onclick="navigateToUpload()">
+                            <i class="fas fa-plus"></i> Report an Issue
+                        </button>
+                        <button class="btn-secondary" onclick="navigateToDashboard()">
+                            <i class="fas fa-chart-line"></i> View Dashboard
+                        </button>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <div class="hero-card">
+                        <div class="card-header">
+                            <h3>Quick Report</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="report-type">
+                                <i class="fas fa-road"></i>
+                                <span>Pothole on Main St.</span>
+                            </div>
+                            <div class="report-status">
+                                <span class="status-badge resolved">Resolved</span>
+                                <span class="report-date">2 days ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Why Choose FixMyStreet?</h2>
+                <p>Comprehensive street issue management for modern cities</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Quick Reporting</h3>
+                    <p>Raise an issue in seconds with a simple, streamlined flow</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Real-time Analytics</h3>
+                    <p>Track progress and get insights with comprehensive dashboards</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <h3>Smart Notifications</h3>
+                    <p>Stay updated with automated status notifications</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Community Driven</h3>
+                    <p>Join thousands of citizens making their cities better</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recent Reports Section -->
+    <section class="recent-reports-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Recent Reports</h2>
+                <a href="reports.html" class="view-all-link">View All <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="reports-grid">
+                <div class="report-card">
+                    <div class="report-header">
+                        <div class="report-type-badge pothole">Pothole</div>
+                        <div class="report-status resolved">Resolved</div>
+                    </div>
+                    <div class="report-content">
+                        <h4>Large pothole on Oak Street</h4>
+                        <p class="report-location"><i class="fas fa-map-marker-alt"></i> Oak Street, Downtown</p>
+                        <p class="report-description">Deep pothole causing traffic issues and potential vehicle damage</p>
+                    </div>
+                    <div class="report-footer">
+                        <span class="report-date">2 days ago</span>
+                        <span class="report-severity high">High Priority</span>
+                    </div>
+                </div>
+                <div class="report-card">
+                    <div class="report-header">
+                        <div class="report-type-badge sanitation">Sanitation</div>
+                        <div class="report-status in-progress">In Progress</div>
+                    </div>
+                    <div class="report-content">
+                        <h4>Overflowing trash bins</h4>
+                        <p class="report-location"><i class="fas fa-map-marker-alt"></i> Park Avenue, Residential</p>
+                        <p class="report-description">Multiple trash bins overflowing with scattered garbage</p>
+                    </div>
+                    <div class="report-footer">
+                        <span class="report-date">1 day ago</span>
+                        <span class="report-severity medium">Medium Priority</span>
+                    </div>
+                </div>
+                <div class="report-card">
+                    <div class="report-header">
+                        <div class="report-type-badge street-light">Street Light</div>
+                        <div class="report-status reported">Reported</div>
+                    </div>
+                    <div class="report-content">
+                        <h4>Broken street light</h4>
+                        <p class="report-location"><i class="fas fa-map-marker-alt"></i> Main Boulevard</p>
+                        <p class="report-description">Street light not working, creating safety concerns</p>
+                    </div>
+                    <div class="report-footer">
+                        <span class="report-date">3 hours ago</span>
+                        <span class="report-severity medium">Medium Priority</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to Make a Difference?</h2>
+                <p>Join thousands of citizens who are actively improving their communities</p>
+                <div class="cta-actions">
+                    <button class="btn-primary" onclick="navigateToReport()">
+                        <i class="fas fa-plus"></i> Report Your First Issue
+                    </button>
+                    <button class="btn-outline" onclick="navigateToDashboard()">
+                        <i class="fas fa-chart-bar"></i> Explore Dashboard
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-road"></i>
+                        <span>FixMyStreet</span>
+                    </div>
+                    <p>Empowering communities to report and track street issues for better city management.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                        <li><a href="reports.html">Reports</a></li>
+                        <li><a href="analytics.html">Analytics</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="help.html">Help Center</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Info</h4>
+                    <div class="contact-info">
+                        <p><i class="fas fa-envelope"></i> support@fixmystreet.com</p>
+                        <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                        <p><i class="fas fa-map-marker-alt"></i> 123 City Hall, Downtown</p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 FixMyStreet. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Notifications Panel -->
+    <div class="notifications-panel" id="notificationsPanel">
+        <div class="notifications-header">
+            <h3>Notifications</h3>
+            <button class="close-notifications" onclick="closeNotifications()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="notifications-content">
+            <div class="notification-item">
+                <div class="notification-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="notification-content">
+                    <h4>Issue Resolved</h4>
+                    <p>Your pothole report on Oak Street has been fixed</p>
+                    <span class="notification-time">2 hours ago</span>
+                </div>
+            </div>
+            <div class="notification-item">
+                <div class="notification-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="notification-content">
+                    <h4>Status Update</h4>
+                    <p>Your sanitation report is now in progress</p>
+                    <span class="notification-time">1 day ago</span>
+                </div>
+            </div>
+            <div class="notification-item">
+                <div class="notification-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="notification-content">
+                    <h4>Thank You!</h4>
+                    <p>Your report helped improve community safety</p>
+                    <span class="notification-time">3 days ago</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="api.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

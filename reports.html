@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - FixMyStreet</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    
+
+    <!-- Header -->
+    <header class="main-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <a class="logo" href="index2.html">
+                        <i class="fas fa-road"></i>
+                        <div class="logo-text">
+                            <h1>FixMyStreet</h1>
+                            <span class="tagline">REPORT • TRACK • RESOLVE</span>
+                        </div>
+                    </a>
+                </div>
+                
+                <nav class="main-nav">
+                    <a href="index2.html" class="nav-link">Home</a>
+                    <a href="dashboard.html" class="nav-link">Dashboard</a>
+                    <a href="reports.html" class="nav-link active">Reports</a>
+                    <a href="analytics.html" class="nav-link">Analytics</a>
+                    <a href="about.html" class="nav-link">About</a>
+                </nav>
+
+                <div class="user-section">
+                    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+                        <i class="fas fa-sun sun-icon"></i>
+                        <i class="fas fa-moon moon-icon"></i>
+                    </button>
+                    <div class="notifications" onclick="toggleNotifications()">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </div>
+                    <div class="user-profile" onclick="toggleUserMenu()">
+                        <img src="https://via.placeholder.com/40x40/667eea/ffffff?text=J" alt="User" class="user-avatar">
+                        <span class="user-name">John Doe</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="user-menu" id="userMenu">
+                        <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                        <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+                        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Reports Content -->
+    <main class="reports-main">
+        <div class="container">
+            <!-- Reports Header -->
+            <div class="reports-header">
+                <div class="reports-title">
+                    <h1>Street Issue Reports</h1>
+                    <p>Manage and track all reported street issues in your area</p>
+                </div>
+                <div class="reports-actions">
+                    <button class="btn-primary" onclick="navigateToReport()">
+                        <i class="fas fa-plus"></i> New Report
+                    </button>
+                    <button class="btn-secondary" onclick="exportReports()">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filters and Search -->
+            <div class="reports-filters">
+                <div class="filter-group">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search reports..." id="searchInput">
+                    </div>
+                    <select class="filter-select" id="statusFilter">
+                        <option value="all">All Status</option>
+                        <option value="reported">Reported</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="resolved">Resolved</option>
+                        <option value="closed">Closed</option>
+                    </select>
+                    <select class="filter-select" id="typeFilter">
+                        <option value="all">All Types</option>
+                        <option value="pothole">Pothole</option>
+                        <option value="road-damage">Road Damage</option>
+                        <option value="sanitation">Sanitation</option>
+                        <option value="street-light">Street Light</option>
+                        <option value="traffic-sign">Traffic Sign</option>
+                        <option value="sidewalk">Sidewalk</option>
+                        <option value="drainage">Drainage</option>
+                        <option value="graffiti">Graffiti</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <select class="filter-select" id="severityFilter">
+                        <option value="all">All Severity</option>
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                        <option value="urgent">Urgent</option>
+                    </select>
+                </div>
+                <div class="view-options">
+                    <button class="view-btn active" onclick="toggleView('grid')">
+                        <i class="fas fa-th"></i>
+                    </button>
+                    <button class="view-btn" onclick="toggleView('list')">
+                        <i class="fas fa-list"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Reports Stats -->
+            <div class="reports-stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="totalReports">24</span>
+                    <span class="stat-label">Total Reports</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="resolvedReports">18</span>
+                    <span class="stat-label">Resolved</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="inProgressReports">4</span>
+                    <span class="stat-label">In Progress</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="newReports">2</span>
+                    <span class="stat-label">New This Week</span>
+                </div>
+            </div>
+
+            <!-- Reports Grid -->
+            <div class="reports-grid" id="reportsGrid">
+                <!-- Report Card 1 -->
+                <div class="report-card">
+                    <div class="report-header">
+                        <div class="report-type-badge pothole">Pothole</div>
+                        <div class="report-status resolved">Resolved</div>
+                    </div>
+                    <div class="report-image">
+                        <img src="https://via.placeholder.com/300x200/667eea/ffffff?text=Pothole" alt="Report Image">
+                        <div class="report-overlay">
+                            <button class="view-btn" onclick="viewReport(1)">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="report-content">
+                        <h3>Large pothole on Oak Street</h3>
+                        <p class="report-location">
+                            <i class="fas fa-map-marker-alt"></i> Oak Street, Downtown
+                        </p>
+                        <p class="report-description">
+                            Deep pothole causing traffic issues and potential vehicle damage. 
+                            Reported by multiple residents.
+                        </p>
+                        <div class="report-meta">
+                            <div class="report-severity high">High Priority</div>
+                            <div class="report-date">2 days ago</div>
+                        </div>
+                    </div>
+                    <div class="report-footer">
+                        <div class="report-actions">
+                            <button class="action-btn" onclick="editReport(1)">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn" onclick="shareReport(1)">
+                                <i class="fas fa-share"></i>
+                            </button>
+                            <button class="action-btn" onclick="deleteReport(1)">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Report Card 2 -->
+                <div class="report-card">
+                    <div class="report-header">
+                        <div class="report-type-badge sanitation">Sanitation</div>
+                        <div class="report-status in-progress">In Progress</div>
+                    </div>
+                    <div class="report-image">
+                        <img src="https://via.placeholder.com/300x200/28a745/ffffff?text=Sanitation" alt="Report Image">
+                        <div class="report-overlay">
+                            <button class="view-btn" onclick="viewReport(2)">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="report-content">
+                        <h3>Overflowing trash bins</h3>
+                        <p class="report-location">
+                            <i class="fas fa-map-marker-alt"></i> Park Avenue, Residential
+                        </p>
+                        <p class="report-description">
+                            Multiple trash bins overflowing with scattered garbage affecting 
+                            the entire block.
+                        </p>
+                        <div class="report-meta">
+                            <div class="report-severity medium">Medium Priority</div>
+                            <div class="report-date">1 day ago</div>
+                        </div>
+                    </div>
+                    <div class="report-footer">
+                        <div class="report-actions">
+                            <button class="action-btn" onclick="editReport(2)">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn" onclick="shareReport(2)">
+                                <i class="fas fa-share"></i>
+                            </button>
+                            <button class="action-btn" onclick="deleteReport(2)">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Report Card 3 -->
+                <div class="report-card">
+                    <div class="report-header">
+                        <div class="report-type-badge street-light">Street Light</div>
+                        <div class="report-status reported">Reported</div>
+                    </div>
+                    <div class="report-image">
+                        <img src="https://via.placeholder.com/300x200/ffc107/ffffff?text=Street+Light" alt="Report Image">
+                        <div class="report-overlay">
+                            <button class="view-btn" onclick="viewReport(3)">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="report-content">
+                        <h3>Broken street light</h3>
+                        <p class="report-location">
+                            <i class="fas fa-map-marker-alt"></i> Main Boulevard
+                        </p>
+                        <p class="report-description">
+                            Street light not working, creating safety concerns for pedestrians 
+                            and drivers at night.
+                        </p>
+                        <div class="report-meta">
+                            <div class="report-severity medium">Medium Priority</div>
+                            <div class="report-date">3 hours ago</div>
+                        </div>
+                    </div>
+                    <div class="report-footer">
+                        <div class="report-actions">
+                            <button class="action-btn" onclick="editReport(3)">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn" onclick="shareReport(3)">
+                                <i class="fas fa-share"></i>
+                            </button>
+                            <button class="action-btn" onclick="deleteReport(3)">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Report Card 4 -->
+                <div class="report-card">
+                    <div class="report-header">
+                        <div class="report-type-badge road-damage">Road Damage</div>
+                        <div class="report-status resolved">Resolved</div>
+                    </div>
+                    <div class="report-image">
+                        <img src="https://via.placeholder.com/300x200/dc3545/ffffff?text=Road+Damage" alt="Report Image">
+                        <div class="report-overlay">
+                            <button class="view-btn" onclick="viewReport(4)">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="report-content">
+                        <h3>Cracked pavement</h3>
+                        <p class="report-location">
+                            <i class="fas fa-map-marker-alt"></i> Elm Street, Commercial
+                        </p>
+                        <p class="report-description">
+                            Large cracks in the pavement with loose debris creating 
+                            safety hazards for vehicles.
+                        </p>
+                        <div class="report-meta">
+                            <div class="report-severity high">High Priority</div>
+                            <div class="report-date">5 days ago</div>
+                        </div>
+                    </div>
+                    <div class="report-footer">
+                        <div class="report-actions">
+                            <button class="action-btn" onclick="editReport(4)">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn" onclick="shareReport(4)">
+                                <i class="fas fa-share"></i>
+                            </button>
+                            <button class="action-btn" onclick="deleteReport(4)">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <button class="page-btn" onclick="changePage(-1)">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <span class="page-numbers">
+                    <button class="page-number active">1</button>
+                    <button class="page-number">2</button>
+                    <button class="page-number">3</button>
+                </span>
+                <button class="page-btn" onclick="changePage(1)">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Report Detail Modal -->
+    <div class="modal" id="reportModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Report Details</h2>
+                <button class="close-modal" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Report details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="api.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

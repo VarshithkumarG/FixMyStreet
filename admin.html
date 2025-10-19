@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - FixMyStreet</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <a class="logo" href="index2.html">
+                        <i class="fas fa-road"></i>
+                        <div class="logo-text">
+                            <h1>FixMyStreet Admin</h1>
+                            <span class="tagline">MODERATE • ASSIGN • RESOLVE</span>
+                        </div>
+                    </a>
+                </div>
+                <nav class="main-nav">
+                    <a href="index2.html" class="nav-link">Home</a>
+                    <a href="reports.html" class="nav-link">Reports</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="reports-main">
+        <div class="container">
+            <div class="reports-header">
+                <div class="reports-title">
+                    <h1>Issue Management</h1>
+                    <p>Review, assign, and update the status of reported issues</p>
+                </div>
+                <div class="reports-actions">
+                    <select class="filter-select" id="adminStatusFilter">
+                        <option value="all">All</option>
+                        <option value="reported">Reported</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="resolved">Resolved</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="reports-grid" id="adminReportsGrid"></div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function(){
+            requireAdmin();
+            renderAdminReports();
+            document.getElementById('adminStatusFilter').addEventListener('change', renderAdminReports);
+        });
+    </script>
+</body>
+</html>
+

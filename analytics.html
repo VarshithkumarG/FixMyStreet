@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - FixMyStreet</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    
+
+    <!-- Header -->
+    <header class="main-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <a class="logo" href="index2.html">
+                        <i class="fas fa-road"></i>
+                        <div class="logo-text">
+                            <h1>FixMyStreet</h1>
+                            <span class="tagline">REPORT • TRACK • RESOLVE</span>
+                        </div>
+                    </a>
+                </div>
+                
+                <nav class="main-nav">
+                    <a href="index2.html" class="nav-link">Home</a>
+                    <a href="dashboard.html" class="nav-link">Dashboard</a>
+                    <a href="reports.html" class="nav-link">Reports</a>
+                    <a href="analytics.html" class="nav-link active">Analytics</a>
+                    <a href="about.html" class="nav-link">About</a>
+                </nav>
+
+                <div class="user-section">
+                    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+                        <i class="fas fa-sun sun-icon"></i>
+                        <i class="fas fa-moon moon-icon"></i>
+                    </button>
+                    <div class="notifications" onclick="toggleNotifications()">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </div>
+                    <div class="user-profile" onclick="toggleUserMenu()">
+                        <img src="https://via.placeholder.com/40x40/667eea/ffffff?text=J" alt="User" class="user-avatar">
+                        <span class="user-name">John Doe</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="user-menu" id="userMenu">
+                        <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                        <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+                        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Analytics Content -->
+    <main class="analytics-main">
+        <div class="container">
+            <!-- Analytics Header -->
+            <div class="analytics-header">
+                <div class="analytics-title">
+                    <h1>Analytics Dashboard</h1>
+                    <p>Comprehensive insights into street issue management and community impact</p>
+                </div>
+                <div class="analytics-actions">
+                    <select class="time-filter" id="timeFilter">
+                        <option value="7d">Last 7 Days</option>
+                        <option value="30d" selected>Last 30 Days</option>
+                        <option value="90d">Last 90 Days</option>
+                        <option value="1y">Last Year</option>
+                    </select>
+                    <button class="btn-secondary" onclick="exportAnalytics()">
+                        <i class="fas fa-download"></i> Export Data
+                    </button>
+                </div>
+            </div>
+
+            <!-- Key Metrics -->
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="metric-content">
+                        <div class="metric-number" id="totalReports">0</div>
+                        <div class="metric-label">Total Reports</div>
+                        <div class="metric-change neutral">Live</div>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="metric-content">
+                        <div class="metric-number" id="resolutionRate">0%</div>
+                        <div class="metric-label">Resolution Rate</div>
+                        <div class="metric-change neutral">Live</div>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="metric-content">
+                        <div class="metric-number" id="avgResponseTime">0 Days</div>
+                        <div class="metric-label">Avg. Response Time</div>
+                        <div class="metric-change neutral">Live</div>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="metric-content">
+                        <div class="metric-number" id="citiesCovered">0</div>
+                        <div class="metric-label">Cities Covered</div>
+                        <div class="metric-change neutral">Live</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-grid">
+                <!-- Reports Over Time -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Reports Over Time</h3>
+                        <div class="chart-controls">
+                            <button class="chart-btn active" onclick="updateChart('reports', 'line')">Line</button>
+                            <button class="chart-btn" onclick="updateChart('reports', 'bar')">Bar</button>
+                        </div>
+                    </div>
+                    <div class="chart-content">
+                        <canvas id="reportsChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+
+                <!-- Issue Types Distribution -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Issue Types Distribution</h3>
+                        <div class="chart-controls">
+                            <button class="chart-btn active" onclick="updateChart('types', 'doughnut')">Doughnut</button>
+                            <button class="chart-btn" onclick="updateChart('types', 'pie')">Pie</button>
+                        </div>
+                    </div>
+                    <div class="chart-content">
+                        <canvas id="typesChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+
+                <!-- Resolution Timeline -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Resolution Timeline</h3>
+                        <div class="chart-controls">
+                            <button class="chart-btn active" onclick="updateChart('resolution', 'bar')">Bar</button>
+                            <button class="chart-btn" onclick="updateChart('resolution', 'line')">Line</button>
+                        </div>
+                    </div>
+                    <div class="chart-content">
+                        <canvas id="resolutionChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+
+                <!-- Geographic Distribution -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Geographic Distribution</h3>
+                        <div class="chart-controls">
+                            <button class="chart-btn active" onclick="updateChart('geo', 'bar')">Bar</button>
+                            <button class="chart-btn" onclick="updateChart('geo', 'horizontal')">Horizontal</button>
+                        </div>
+                    </div>
+                    <div class="chart-content">
+                        <canvas id="geoChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance Metrics -->
+            <div class="performance-section">
+                <div class="section-header">
+                    <h2>Performance Metrics</h2>
+                    <p>Detailed breakdown of system performance and user engagement</p>
+                </div>
+                
+                <div class="performance-grid">
+                    <!-- Response Time Analysis -->
+                    <div class="performance-card">
+                        <div class="card-header">
+                            <h3>Response Time Analysis</h3>
+                            <span class="card-badge excellent">Excellent</span>
+                        </div>
+                        <div class="card-content">
+                            <div class="performance-metric">
+                                <div class="metric-label">Average Response Time</div>
+                                <div class="metric-value">2.3 days</div>
+                                <div class="metric-trend positive">
+                                    <i class="fas fa-arrow-down"></i> 15% faster
+                                </div>
+                            </div>
+                            <div class="performance-metric">
+                                <div class="metric-label">Fastest Resolution</div>
+                                <div class="metric-value">4 hours</div>
+                                <div class="metric-trend positive">
+                                    <i class="fas fa-arrow-up"></i> Emergency response
+                                </div>
+                            </div>
+                            <div class="performance-metric">
+                                <div class="metric-label">Slowest Resolution</div>
+                                <div class="metric-value">12 days</div>
+                                <div class="metric-trend neutral">
+                                    <i class="fas fa-minus"></i> Complex issue
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- User Engagement -->
+                    <div class="performance-card">
+                        <div class="card-header">
+                            <h3>User Engagement</h3>
+                            <span class="card-badge good">Good</span>
+                        </div>
+                        <div class="card-content">
+                            <div class="performance-metric">
+                                <div class="metric-label">Active Users</div>
+                                <div class="metric-value">2,450</div>
+                                <div class="metric-trend positive">
+                                    <i class="fas fa-arrow-up"></i> +8% this month
+                                </div>
+                            </div>
+                            <div class="performance-metric">
+                                <div class="metric-label">Reports per User</div>
+                                <div class="metric-value">6.1</div>
+                                <div class="metric-trend positive">
+                                    <i class="fas fa-arrow-up"></i> +12% increase
+                                </div>
+                            </div>
+                            <div class="performance-metric">
+                                <div class="metric-label">User Satisfaction</div>
+                                <div class="metric-value">4.8/5</div>
+                                <div class="metric-trend positive">
+                                    <i class="fas fa-arrow-up"></i> +0.2 improvement
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cost Analysis -->
+                    <div class="performance-card">
+                        <div class="card-header">
+                            <h3>Cost Analysis</h3>
+                            <span class="card-badge excellent">Excellent</span>
+                        </div>
+                        <div class="card-content">
+                            <div class="performance-metric">
+                                <div class="metric-label">Cost per Resolution</div>
+                                <div class="metric-value">$125</div>
+                                <div class="metric-trend positive">
+                                    <i class="fas fa-arrow-down"></i> 20% reduction
+                                </div>
+                            </div>
+                            <div class="performance-metric">
+                                <div class="metric-label">Total Savings</div>
+                                <div class="metric-value">$2.1M</div>
+                                <div class="metric-trend positive">
+                                    <i class="fas fa-arrow-up"></i> vs traditional methods
+                                </div>
+                            </div>
+                            <div class="performance-metric">
+                                <div class="metric-label">ROI</div>
+                                <div class="metric-value">340%</div>
+                                <div class="metric-trend positive">
+                                    <i class="fas fa-arrow-up"></i> Excellent return
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Performers -->
+            <div class="top-performers-section">
+                <div class="section-header">
+                    <h2>Top Performers</h2>
+                    <p>Recognizing the most active contributors and efficient departments</p>
+                </div>
+                
+                <div class="performers-grid">
+                    <div class="performer-card">
+                        <div class="card-header">
+                            <h3>Top Contributors</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="performer-list">
+                                <div class="performer-item">
+                                    <div class="performer-avatar">
+                                        <img src="https://via.placeholder.com/40x40/667eea/ffffff?text=JD" alt="User">
+                                    </div>
+                                    <div class="performer-info">
+                                        <div class="performer-name">John Doe</div>
+                                        <div class="performer-stats">24 reports, 18 resolved</div>
+                                    </div>
+                                    <div class="performer-badge gold">#1</div>
+                                </div>
+                                <div class="performer-item">
+                                    <div class="performer-avatar">
+                                        <img src="https://via.placeholder.com/40x40/28a745/ffffff?text=SM" alt="User">
+                                    </div>
+                                    <div class="performer-info">
+                                        <div class="performer-name">Sarah Miller</div>
+                                        <div class="performer-stats">19 reports, 15 resolved</div>
+                                    </div>
+                                    <div class="performer-badge silver">#2</div>
+                                </div>
+                                <div class="performer-item">
+                                    <div class="performer-avatar">
+                                        <img src="https://via.placeholder.com/40x40/ffc107/ffffff?text=RB" alt="User">
+                                    </div>
+                                    <div class="performer-info">
+                                        <div class="performer-name">Robert Brown</div>
+                                        <div class="performer-stats">16 reports, 12 resolved</div>
+                                    </div>
+                                    <div class="performer-badge bronze">#3</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="performer-card">
+                        <div class="card-header">
+                            <h3>Most Efficient Departments</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="department-list">
+                                <div class="department-item">
+                                    <div class="department-icon">
+                                        <i class="fas fa-road"></i>
+                                    </div>
+                                    <div class="department-info">
+                                        <div class="department-name">Road Maintenance</div>
+                                        <div class="department-stats">95% resolution rate</div>
+                                    </div>
+                                    <div class="department-rating">⭐⭐⭐⭐⭐</div>
+                                </div>
+                                <div class="department-item">
+                                    <div class="department-icon">
+                                        <i class="fas fa-lightbulb"></i>
+                                    </div>
+                                    <div class="department-info">
+                                        <div class="department-name">Street Lighting</div>
+                                        <div class="department-stats">88% resolution rate</div>
+                                    </div>
+                                    <div class="department-rating">⭐⭐⭐⭐⭐</div>
+                                </div>
+                                <div class="department-item">
+                                    <div class="department-icon">
+                                        <i class="fas fa-trash"></i>
+                                    </div>
+                                    <div class="department-info">
+                                        <div class="department-name">Sanitation</div>
+                                        <div class="department-stats">82% resolution rate</div>
+                                    </div>
+                                    <div class="department-rating">⭐⭐⭐⭐</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="api.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Initialize analytics when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeAnalyticsPage();
+        });
+    </script>
+</body>
+</html>
